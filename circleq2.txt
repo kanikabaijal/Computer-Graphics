@@ -1,0 +1,80 @@
+#include <GL/glut.h>
+#include<stdio.h>
+
+
+void myinit(void)	//initialise toolkit
+{
+  glClearColor(0.1, 0.7, 0.7, 0.0); // background color==blue 
+ 
+  glMatrixMode(GL_PROJECTION);      //In World coordinates: 
+  glLoadIdentity();                 // position the "clipping rectangle
+  gluOrtho2D( -250, 250, -250, 250);// setting up of cocrdinate
+  glMatrixMode(GL_MODELVIEW);      //model coordinate
+}
+
+void display( void )				//display function
+{
+  int radius=100;                                 
+  glClear(GL_COLOR_BUFFER_BIT);     //clear the window 
+ 
+  glMatrixMode(GL_MODELVIEW);      
+  glLoadIdentity();                  //load the matrix
+  int x=0;							//initialise the variables
+     int y=radius;
+     int d=1-radius;
+     int deltaE=3;
+     int deltaSE=-2*radius+5;
+     void Drawcircle(int x,int y);
+     while(y>x)
+     {
+               if(d<0)/*select E*/
+               {
+                               d+=deltaE;
+                               deltaE+=2;
+                               deltaSE+=2;
+                               }
+               else		//select SE
+               {
+                   d+=deltaSE;
+                   deltaE+=2;
+                   deltaSE+=4;
+                   y--;
+                   }
+               x++;
+               Drawcircle( x, y);
+               }
+
+
+
+  glFlush(); //passes the actions into the pipeline
+                         
+}
+
+     
+   void Drawcircle(int x,int y)
+   {
+        glBegin(GL_POINTS) ;  
+        glColor3f ( 1.0, 0.3, 0.2);   
+      glVertex2i( x, y );
+       glVertex2i( -x, y );
+       glVertex2i( x, -y );
+       glVertex2i( -x, -y );
+       glVertex2i( y, x );
+       glVertex2i( -y, x );
+       glVertex2i( y, -x );
+       glVertex2i( -y, -x );
+        glEnd();
+        }
+void main(int argc, char** argv)	//main func
+{
+  glutInit(&argc,argv);
+  glutInitWindowSize( 500,500);
+
+  glutInitDisplayMode( GLUT_RGB | GLUT_SINGLE);
+  glutCreateWindow("My circle"); /* create window                  */
+   
+  glutDisplayFunc(display);        
+      myinit();                     
+
+  glutMainLoop();                   /* pass control to the main loop  */
+}

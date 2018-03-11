@@ -1,0 +1,95 @@
+#include <GL/glut.h>
+#include<stdio.h>
+
+
+void myinit(void)			//initialise the toolkit
+{
+  glClearColor(0.1, 0.7, 0.7, 0.0); 
+ 
+  glMatrixMode(GL_PROJECTION);      /* In World coordinates: */
+  glLoadIdentity();                 /* position the "clipping rectangle" */
+  gluOrtho2D( -250, 250, -250,250);
+  glMatrixMode(GL_MODELVIEW);       
+  }
+
+void display( void )
+{
+ int x0=0;
+ int y0=0;
+ int x1=200;
+ int y1=200;                                   
+  glClear(GL_COLOR_BUFFER_BIT);     //clear the window
+ 
+  glMatrixMode(GL_MODELVIEW);      
+  glLoadIdentity();                 //in terms of World coordinates 
+  int dx=x1-x0;
+int dy=y1-y0;
+float m=dy/dx;
+if(m<=1)
+{
+int d=2*dy-dx;
+int incrE=2*dy;
+int incrne=2*(dy-dx);
+int x=x0,y=y0;
+glBegin(GL_POINTS) ;             /* draw a filled polygon */
+glColor3f ( 0, 0, 0);       
+glVertex2i( x, y );         
+while(x<x1)
+{
+            if(d<=0)
+{ 
+         d=d+incrE;
+}
+else
+{ 
+    d=d+incrne;
+    y++;
+}
+x++;
+glBegin(GL_POINTS) ;             //point marking 
+glColor3f ( 0, 0, 0);       
+glVertex2i( x, y );         /* (x,y) */
+}
+}
+
+
+else
+{
+int d=dy-2*dx;
+int incrE=2*(-dx);
+int incrne=2*(dy-dx);
+int x=x0,y=y0;
+glBegin(GL_POINTS) ;             /* draw a filled polygon */
+glColor3f ( 0, 0, 0);      
+glVertex2i( x, y );         /* (x,y) */
+while(y<y1)
+{
+            if(d<=0)
+{ 
+         d=d+incrE;
+}
+else
+{ 
+    d=d+incrne;
+    x++;
+}
+y++;
+glBegin(GL_POINTS) ;             //point drawing
+glColor3f (0, 0, 0);       
+glVertex2i( x, y );         /* (x,y) */
+}
+    }
+    glEnd();
+  glFlush();                        //send all commands 
+}
+void main(int argc, char** argv)
+{
+  glutInit(&argc,argv);
+  glutInitWindowSize( 500,500);    
+  glutInitDisplayMode( GLUT_RGB | GLUT_SINGLE);
+  glutCreateWindow("line"); /* window title                   */
+  glutDisplayFunc(display);         /* tell OpenGL main loop what     */
+  myinit();                         /* set attributes                 */
+
+  glutMainLoop();                   /* pass control to the main loop  */
+}
